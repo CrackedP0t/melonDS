@@ -21,6 +21,7 @@
 
 #include "Input.h"
 #include "PlatformConfig.h"
+#include "NDS.h"
 
 
 namespace Input
@@ -36,6 +37,8 @@ u32 HotkeyPress, HotkeyRelease;
 
 u32 InputMask;
 
+bool TouchMoving;
+
 
 void Init()
 {
@@ -47,6 +50,8 @@ void Init()
     JoyHotkeyMask = 0;
     HotkeyMask = 0;
     LastHotkeyMask = 0;
+
+    TouchMoving = false;
 }
 
 
@@ -184,6 +189,38 @@ bool JoystickButtonDown(int val)
     return false;
 }
 
+void DoTouchMovement() {
+    const int haxisnum = 0;
+    const int vaxisnum = 1;
+
+    const int deadzone = 3000;
+
+    const int axis_max = 32767;
+
+    const int centerx = 127;
+    const int centery = 95;
+
+    int radius = Config::TouchMoveRadius;
+
+    Sint16 haxisval = SDL_JoystickGetAxis(Joystick, haxisnum);
+    Sint16 vaxisval = SDL_JoystickGetAxis(Joystick, vaxisnum);
+
+    if (haxisval < -deadzone || haxisval > deadzone || vaxisval < -deadzone || vaxisval > deadzone) {
+        if (TouchMoving) {
+            int hscaled = (int)haxisval * radius / axis_max;
+            int vscaled = (int)vaxisval * radius / axis_max;
+
+            NDS::TouchScreen(centerx + hscaled, centery + vscaled);
+        } else {
+            NDS::TouchScreen(centerx, centery);
+            TouchMoving = true;
+        }
+    } else if (TouchMoving) {
+        NDS::ReleaseScreen();
+        TouchMoving = false;
+    }
+}
+
 void Process()
 {
     SDL_JoystickUpdate();
@@ -218,6 +255,8 @@ void Process()
     HotkeyPress = HotkeyMask & ~LastHotkeyMask;
     HotkeyRelease = LastHotkeyMask & ~HotkeyMask;
     LastHotkeyMask = HotkeyMask;
+
+    DoTouchMovement();
 }
 
 

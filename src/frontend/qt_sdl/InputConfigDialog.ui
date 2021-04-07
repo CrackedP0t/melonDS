@@ -37,6 +37,11 @@
        <string>General hotkeys</string>
       </attribute>
      </widget>
+     <widget class="QWidget" name="tabTouchMove">
+      <attribute name="title">
+       <string>Touch movement</string>
+      </attribute>
+     </widget>
     </widget>
    </item>
    <item>

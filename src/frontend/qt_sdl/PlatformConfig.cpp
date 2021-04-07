@@ -32,6 +32,8 @@ int HKJoyMapping[HK_MAX];
 
 int JoystickID;
 
+int TouchMoveRadius;
+
 int WindowWidth;
 int WindowHeight;
 int WindowMaximized;
@@ -137,6 +139,8 @@ ConfigEntry PlatformConfigFile[] =
     {"HKJoy_SolarSensorIncrease", 0, &HKJoyMapping[HK_SolarSensorIncrease], -1, NULL, 0},
 
     {"JoystickID", 0, &JoystickID, 0, NULL, 0},
+
+    {"TouchMoveRadius", 0, &TouchMoveRadius, 20, NULL, 0},
 
     {"WindowWidth",  0, &WindowWidth,  256, NULL, 0},
     {"WindowHeight", 0, &WindowHeight, 384, NULL, 0},

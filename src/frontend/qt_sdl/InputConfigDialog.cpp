@@ -19,6 +19,7 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QKeyEvent>
+#include <QSpinBox>
 
 #include <SDL2/SDL.h>
 
@@ -100,6 +101,8 @@ InputConfigDialog::InputConfigDialog(QWidget* parent) : QDialog(parent), ui(new 
     populatePage(ui->tabAddons, 2, hk_addons_labels, addonsKeyMap, addonsJoyMap);
     populatePage(ui->tabHotkeysGeneral, 8, hk_general_labels, hkGeneralKeyMap, hkGeneralJoyMap);
 
+    setupTouchMove();
+
     int njoy = SDL_NumJoysticks();
     if (njoy > 0)
     {
@@ -120,6 +123,28 @@ InputConfigDialog::InputConfigDialog(QWidget* parent) : QDialog(parent), ui(new 
 InputConfigDialog::~InputConfigDialog()
 {
     delete ui;
+}
+
+void InputConfigDialog::setupTouchMove() {
+    QGridLayout* main_layout = new QGridLayout();
+    main_layout->setColumnStretch(1, 1);
+
+    QLabel* label = new QLabel("Radius:");
+
+    QSpinBox* number = new QSpinBox();
+    number->setObjectName("spnTouchMoveRadius");
+    number->setValue(Config::TouchMoveRadius);
+    number->setMinimum(1);
+    number->setMaximum(95);
+
+    connect(number, QOverload<int>::of(&QSpinBox::valueChanged),
+        [&](int i){Config::TouchMoveRadius = i;});
+
+    main_layout->addWidget(label, 0, 0);
+    main_layout->addWidget(number, 0, 1);
+
+    ui->tabTouchMove->setLayout(main_layout);
+    ui->tabTouchMove->sizePolicy().setVerticalPolicy(QSizePolicy::Minimum);
 }
 
 void InputConfigDialog::populatePage(QWidget* page, int num, const char** labels, int* keymap, int* joymap)

@@ -59,6 +59,8 @@ private slots:
 
 private:
     void populatePage(QWidget* page, int num, const char** labels, int* keymap, int* joymap);
+    
+    void setupTouchMove();
 
     Ui::InputConfigDialog* ui;
 

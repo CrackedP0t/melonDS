@@ -130,18 +130,18 @@ void InputConfigDialog::setupTouchMove() {
     main_layout->setColumnStretch(1, 1);
 
     QLabel* label = new QLabel("Radius:");
-
-    QSpinBox* number = new QSpinBox();
-    number->setObjectName("spnTouchMoveRadius");
-    number->setValue(Config::TouchMoveRadius);
-    number->setMinimum(1);
-    number->setMaximum(95);
-
-    connect(number, QOverload<int>::of(&QSpinBox::valueChanged),
-        [&](int i){Config::TouchMoveRadius = i;});
-
     main_layout->addWidget(label, 0, 0);
-    main_layout->addWidget(number, 0, 1);
+
+    QSpinBox* input = new QSpinBox();
+    input->setValue(Config::TouchMoveRadius);
+    input->setMinimum(1);
+    input->setMaximum(95);
+    connect(input, QOverload<int>::of(&QSpinBox::valueChanged),
+        [&](int i){Config::TouchMoveRadius = i;});
+    main_layout->addWidget(input, 0, 1);
+
+    //label = new QLabel("Corner:");
+
 
     ui->tabTouchMove->setLayout(main_layout);
     ui->tabTouchMove->sizePolicy().setVerticalPolicy(QSizePolicy::Minimum);

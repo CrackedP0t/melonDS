@@ -200,6 +200,9 @@ void DoTouchMovement() {
     const int centerx = 127;
     const int centery = 95;
 
+    const int maxx = 255;
+    const int maxy = 191;
+
     int radius = Config::TouchMoveRadius;
 
     Sint16 haxisval = SDL_JoystickGetAxis(Joystick, haxisnum);
@@ -210,7 +213,7 @@ void DoTouchMovement() {
             int hscaled = (int)haxisval * radius / axis_max;
             int vscaled = (int)vaxisval * radius / axis_max;
 
-            NDS::TouchScreen(centerx + hscaled, centery + vscaled);
+            NDS::TouchScreen(maxx - radius + hscaled, maxy - radius + vscaled);
         } else {
             NDS::TouchScreen(centerx, centery);
             TouchMoving = true;
